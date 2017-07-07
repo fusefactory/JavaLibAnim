@@ -1,79 +1,52 @@
 package com.fuse.anim;
 
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
 import java.util.*;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-/**
- * Unit test for com.fuse.utils.Event.
- */
-public class AnimatableTest extends TestCase
-{
-  /**
-   * Create the test case
-   *
-   * @param testName name of the test case
-   */
-  public AnimatableTest( String testName )
-  {
-      super( testName );
-  }
-
-  /**
-   * @return the suite of tests being tested
-   */
-  public static Test suite()
-  {
-      return new TestSuite( AnimatableTest.class );
-  }
-
-  /**
-   * Test Logic
-   */
+public class AnimatableTest {
   private float result;
   private List<Float> values;
 
-  public void testApp()
-  {
+  @Test public void stopAnimatingEvent(){
     values = new ArrayList<Float>();
 
-    { // stopAnimatingEvent triggered with final value
-      Animatable anim = new Animatable();
-      anim.setDuration(2.0f); // 2 seconds
-      anim.animateFromTo(0.0f, 3.0f);
+    Animatable anim = new Animatable();
+    anim.setDuration(2.0f); // 2 seconds
+    anim.animateFromTo(0.0f, 3.0f);
 
-      result = -1.0f;
-      anim.stopAnimatingEvent.addListener((AnimatableBase a) -> {
-        result = ((Animatable)a).val();
-      });
+    result = -1.0f;
+    anim.stopAnimatingEvent.addListener((AnimatableBase a) -> {
+      result = ((Animatable)a).val();
+    });
 
-      assertEquals(result, -1,0f);
-      anim.update(1.0f);
-      assertEquals(result, -1,0f);
-      assertEquals(anim.val(), 1.5f);
-      anim.update(1.0f);
-      assertEquals(result, 3.0f);
-      assertEquals(anim.val(), 3.0f);
-    }
+    assertEquals(result, -1,0f);
+    anim.update(1.0f);
+    assertEquals(result, -1,0f);
+    assertEquals((float)anim.val(), 1.5f, 0.00001f);
+    anim.update(1.0f);
+    assertEquals(result, 3.0f, 0.00001f);
+    assertEquals((float)anim.val(), 3.0f, 0.00001f);
+  }
 
-    { // animatable calls update event only once for final update
-      Animatable anim = new Animatable();
-      anim.setDuration(1.0f);
-      anim.animateFromTo(0.0f, 1.0f);
+  @Test public void updateOnlyOnceOnFinish(){
+    values = new ArrayList<Float>();
 
-      anim.updateEvent.addListener((Float val) -> {
-        values.add(val);
-      });
+    Animatable anim = new Animatable();
+    anim.setDuration(1.0f);
+    anim.animateFromTo(0.0f, 1.0f);
 
-      assertEquals(values.size(), 0);
-      anim.update(0.5f);
-      assertEquals(values.size(), 1);
-      anim.update(0.5f);
-      assertEquals(values.size(), 2);
-      assertEquals(values.get(0), 0.5f);
-      assertEquals(values.get(1), 1.0f);
-    }
+    anim.updateEvent.addListener((Float val) -> {
+      values.add(val);
+    });
+
+    assertEquals(values.size(), 0);
+    anim.update(0.5f);
+    assertEquals(values.size(), 1);
+    anim.update(0.5f);
+    assertEquals(values.size(), 2);
+    assertEquals((float)values.get(0), 0.5f, 0.00001f);
+    assertEquals((float)values.get(1), 1.0f, 0.00001f);
   }
 }

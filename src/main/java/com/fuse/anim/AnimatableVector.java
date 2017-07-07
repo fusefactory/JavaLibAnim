@@ -24,6 +24,7 @@ public class AnimatableVector extends AnimatableBaseWithValue<PVector> {
   }
 
   public float getDistance(){ return fromValue.dist(toValue); }
+  public PVector getDeltaVector(){ return PVector.sub(toValue, fromValue); }
 
   @Override
   protected PVector calculateInterpolatedValue(){
