@@ -28,8 +28,8 @@ public class AnimatableVector extends AnimatableBaseWithValue<PVector> {
 
   @Override
   protected PVector calculateInterpolatedValue(){
-    PVector result = fromValue.get(); // no .copy()?!
-    result.lerp(toValue, getCurveValue());
+    float curveValue = getCurveValue();
+    PVector result = PVector.lerp(fromValue, toValue, curveValue);
     return result;
   }
 }
