@@ -52,6 +52,9 @@ public class AnimatableBaseWithValue<T> extends AnimatableBase {
   public T getFromValue(){ return fromValue; }
   public T getToValue(){ return toValue; }
 
+  public void setToValue(T val){ toValue = val; }
+  public void setFromValue(T val){ fromValue = val; }
+
   // helper methods
   public void animateFromTo(T from, T to){
     fromValue = from;
