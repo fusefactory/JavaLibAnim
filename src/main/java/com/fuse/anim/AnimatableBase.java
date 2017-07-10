@@ -12,10 +12,10 @@ import processing.core.PApplet;
  * Concept is stolen from ofxAnimatable by armadillu;
  * https://github.com/armadillu/ofxAnimatable/blob/master/src/ofxAnimatable.h
  *
- * @author mark
- *
- * @usage not designed to be used directly,
+ * Note that this class is not designed to be used directly,
  * should be extended instead; see Animatable class
+ *
+ * @author mark
  */
 public class AnimatableBase {
 
@@ -29,17 +29,28 @@ public class AnimatableBase {
 					delayDuration,
 					delayTime;
 
-	// constructor(s)
+	/**
+	 * Default constructor; initializes an idle animation default values:
+	 * * Duration: 1.0 (seconds)
+	 * * Delay: 0.0
+	 * * Curve: LINEAR
+	 */
 	public AnimatableBase(){
 		_init();
 		curve = new Curve();
 	}
 
+	/**
+	 * Constructor which loads the same default values as the default constructor, but lets the caller specify the curve-type
+	 *
+	 * @param type Curve type (easing) to use for this animation
+	 */
 	public AnimatableBase(CurveType type){
 		_init();
 		setCurveType(type);
 	}
 
+	/** Initializes this event with default values, used by the constructors */
 	private void _init(){
 		isAnimating = false;
 		isDelaying = false;
@@ -51,7 +62,13 @@ public class AnimatableBase {
 		stopAnimatingEvent = new Event<AnimatableBase>();
 	}
 
-	// common methods
+	/**
+	 * Progresses the animation the specified amount of time.
+	 * Triggers the startAnimatingEvent if this progression completes the delay duration
+	 * Triggers the stopAnimatingEvent if this progression completes the animation duration (by calling the finish() method, which call the stop() method)
+	 *
+	 * @param dt DelaTime; amount of time to progress the animation (in seconds)
+	 */
 	public void update(float dt){
 		if(isDelaying){
 			delayTime+= dt;
@@ -81,28 +98,39 @@ public class AnimatableBase {
 		}
 	}
 
-	// returns a value between 0.0 (zero) and 1.0 (one)
+	/** @return float A value between 0.0 (zero; still at beginning) and 1.0 (one; completed) */
 	public float getProgress(){
 		// avoid divide by zero; if duration is zero, progress is always 1.0
 		return duration == 0f ? 1f : PApplet.constrain(progressTime / duration, 0f, 1f);
 	}
 
+	/** @return float This animation's curve-type-specific value for the current progress value */
 	public float getCurveValue(){
 		return curve.get(getProgress());
 	}
 
+	/** @return float The animation's duration in seconds */
 	public float getDuration(){
 		return duration;
 	}
 
+	/**
+	 * Lets the caller specify the animation duration
+	 * @param newDuration New duration in seconds
+	 */
 	public void setDuration(float newDuration){
 		duration = newDuration;
 	}
 
+	/**
+	 * Let the caller update the curve type (for easing) for the animation
+	 * @param type The type of curve to use, se the CurveType enum
+	 */
 	public void setCurveType(CurveType type){
 		curve.setType(type);
 	}
 
+	/** Returns the duration of the delay in seconds */
 	public float getDelayDuration(){
 		return delayDuration;
 	}
