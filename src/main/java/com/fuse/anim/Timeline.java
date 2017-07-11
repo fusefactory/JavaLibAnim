@@ -67,4 +67,8 @@ public class Timeline extends Collection<AnimatableBase> {
 	public void add(Timeline other){
 		this.sync(other);
 	}
+
+	public void remove(Timeline other){
+		this.stopSync(other);
+	}
 }
