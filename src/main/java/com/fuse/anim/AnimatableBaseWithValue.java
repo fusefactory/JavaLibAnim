@@ -107,6 +107,6 @@ public class AnimatableBaseWithValue<T> extends AnimatableBase {
   @Override
   protected void finish(){
     updateValue();
-    stop();
+    super.finish();
   }
 }

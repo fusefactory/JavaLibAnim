@@ -18,31 +18,33 @@ public class Timeline extends Collection<AnimatableBase> {
 		animDoneEvent = new Event<>();
 
 		this.addEvent.addListener((AnimatableBase newAnim) -> {
+			// we'll notify our listener when any of our anims completes
+			this.animDoneEvent.forward(newAnim.doneEvent);
+
+			// auto-start added animations
 			if(!newAnim.isActive())
 				newAnim.start();
 		}, this);
+
+		this.animDoneEvent.addListener((AnimatableBase doneAnim) -> {
+			if(this.size() == 1){
+				// our only animation just finished
+				this.doneEvent.trigger(this);
+			}
+		});
 	}
 
 	public void update(float dt){
-		boolean doneBefore = isDone();
 		this.each((AnimatableBase anim) -> {
 			// update the active...
 			if(anim.isActive()){
 				anim.update(dt);
 
-				// still active? leave it, otherwise remove it
-				if(anim.isActive())
-					return;
+				// animation just finished? remove it
+				if(!anim.isActive())
+					remove(anim);
 			}
-
-			// remove the finished animation
-			animDoneEvent.trigger(anim);
-			remove(anim);
 		});
-
-		if(isDone() && !doneBefore){
-			doneEvent.trigger(this);
-		}
 	}
 
 	public boolean isDone(){
@@ -60,5 +62,9 @@ public class Timeline extends Collection<AnimatableBase> {
 			func.run();
 
 		return this;
+	}
+
+	public void add(Timeline other){
+		this.sync(other);
 	}
 }

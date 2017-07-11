@@ -22,13 +22,8 @@ public class TimelineTest {
 
     List<String> messages = new ArrayList<String>();
 
-    timeline.whenAllDone(() -> {
-      messages.add("all done");
-    });
-
-    timeline.animDoneEvent.addListener((AnimatableBase anim) -> {
-      messages.add("item done");
-    });
+    timeline.whenAllDone(() -> { messages.add("all done"); });
+    timeline.animDoneEvent.addListener((AnimatableBase anim) -> { messages.add("item done"); });
 
     assertEquals(messages.size(), 0);
     timeline.update(4.0f);
@@ -37,9 +32,9 @@ public class TimelineTest {
     assertEquals(messages.size(), 1);
     assertEquals(messages.get(0), "item done");
     timeline.update(0.5f);
+    assertEquals(messages.get(1), "all done");
+    assertEquals(messages.get(2), "item done");
     assertEquals(messages.size(), 3);
-    assertEquals(messages.get(1), "item done");
-    assertEquals(messages.get(2), "all done");
   }
 
   @Test public void autoStart(){
@@ -60,5 +55,48 @@ public class TimelineTest {
     timeline.add(a2);
     assertEquals(a2.isActive(), true);
     assertEquals(a2.isAnimating(), false);
+  }
+
+  @Test public void addOtherTimelines(){
+    // System.out.println("addOtherTimelines");
+    Timeline main = new Timeline();
+    Timeline sub = new Timeline();
+
+    Animatable a1 = new Animatable();
+    a1.setDuration(5.0f);
+    sub.add(a1);
+
+    assertEquals(main.size(), 0);
+    assertEquals(sub.size(), 1);
+    main.add(sub);
+    assertEquals(main.size(), 1); // main adopts animations from sub
+    assertEquals(main.get(0), a1);
+
+    Animatable a2 = new Animatable();
+    a2.setDelayDuration(1.0f);
+    a2.setDuration(5.0f);
+    sub.add(a2);
+
+    // main copies newly added animations from sub
+    assertEquals(main.size(), 2);
+    assertEquals(sub.size(), 2);
+
+    List<String> strings = new ArrayList<>();
+    main.animDoneEvent.addListener((AnimatableBase anim) -> strings.add("main anim done"));
+    main.whenAllDone(() -> strings.add("all main done"));
+    sub.animDoneEvent.addListener((AnimatableBase anim) -> strings.add("sub anim done"));
+    sub.whenAllDone(() -> strings.add("all sub done"));
+
+    assertEquals(strings.size(), 0);
+    sub.update(5.0f);
+    assertEquals(strings.get(0), "main anim done");
+    assertEquals(strings.get(1), "sub anim done");
+    assertEquals(strings.size(), 2);
+    sub.update(1.0f);
+    assertEquals(strings.get(2), "all main done");
+    assertEquals(strings.get(3), "main anim done");
+    assertEquals(strings.get(4), "all sub done");
+    assertEquals(strings.get(5), "sub anim done");
+    assertEquals(strings.size(), 6);
   }
 }

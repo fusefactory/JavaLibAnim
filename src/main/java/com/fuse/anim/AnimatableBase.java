@@ -21,7 +21,7 @@ public class AnimatableBase {
 
 	Curve curve;
 	public Event<Float> updateEvent;
-	public Event<AnimatableBase> startAnimatingEvent, stopAnimatingEvent;
+	public Event<AnimatableBase> startAnimatingEvent, stopAnimatingEvent, doneEvent;
 
 	private boolean isAnimating, isDelaying;
 	private float	duration,
@@ -60,6 +60,7 @@ public class AnimatableBase {
 		updateEvent = new Event<Float>();
 		startAnimatingEvent = new Event<AnimatableBase>();
 		stopAnimatingEvent = new Event<AnimatableBase>();
+		doneEvent = new Event<AnimatableBase>();
 	}
 
 	/**
@@ -164,11 +165,14 @@ public class AnimatableBase {
 	}
 
 	public void stop(){
+		// System.out.println("_stop");
 		stopAnimatingEvent.trigger(this);
 		isAnimating = false;
 	}
 
 	protected void finish(){
+		// System.out.println("_finish");
 		stop();
+		doneEvent.trigger(this);
 	}
 }
