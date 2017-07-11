@@ -26,7 +26,7 @@ public class TimelineTest {
       messages.add("all done");
     });
 
-    timeline.itemDoneEvent.addListener((Animatable anim) -> {
+    timeline.animDoneEvent.addListener((AnimatableBase anim) -> {
       messages.add("item done");
     });
 
@@ -40,5 +40,25 @@ public class TimelineTest {
     assertEquals(messages.size(), 3);
     assertEquals(messages.get(1), "item done");
     assertEquals(messages.get(2), "all done");
+  }
+
+  @Test public void autoStart(){
+    Animatable a1 = new Animatable();
+    a1.setDuration(5.0f);
+    Animatable a2 = new Animatable();
+    a2.setDelayDuration(1.0f);
+    a2.setDuration(5.0f);
+
+    Timeline timeline = new Timeline();
+
+    assertEquals(a1.isActive(), false);
+    timeline.add(a1);
+    assertEquals(a1.isActive(), true);
+    assertEquals(a1.isAnimating(), true);
+
+    assertEquals(a2.isActive(), false);
+    timeline.add(a2);
+    assertEquals(a2.isActive(), true);
+    assertEquals(a2.isAnimating(), false);
   }
 }
