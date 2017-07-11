@@ -72,11 +72,11 @@ public class AnimatableBase {
 	 */
 	public void update(float dt){
 		if(isDelaying){
-			delayTime+= dt;
+			delayTime += dt;
 
 			// still in delay
 			if(delayTime < delayDuration)
-                return;
+				return;
 
 			// delay finished, run update again with the amount of time
 			// that we've surpassed the delay duration
@@ -174,5 +174,12 @@ public class AnimatableBase {
 		// System.out.println("_finish");
 		stop();
 		doneEvent.trigger(this);
+	}
+
+	public float getTimeLeft(){
+		float t = getDuration() - progressTime;
+		if(delayTime < delayDuration)
+			t += delayDuration - delayTime;
+		return t;
 	}
 }

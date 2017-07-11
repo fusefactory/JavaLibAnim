@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>Fuse Anim package</name>
-    <url>https://jitpack.io/#fusefactory/anim/1.0.2</url>
+    <url>https://jitpack.io/#fusefactory/JavaLibAnim/1.0.2</url>
 
     <dependencies>
         <dependency>
@@ -34,10 +34,10 @@
 
         <!-- https://github.com/fusefactory/JavaLibCms -->
         <dependency>
-            <groupId>com.github.fusefactory</groupId>
-            <artifactId>JavaLibCms</artifactId>
-            <version>1.0.1</version>
-        </dependency>
+    	    <groupId>com.github.fusefactory</groupId>
+    	    <artifactId>JavaLibCms</artifactId>
+    	    <version>1.1.1</version>
+    	</dependency>
     </dependencies>
 
     <repositories>

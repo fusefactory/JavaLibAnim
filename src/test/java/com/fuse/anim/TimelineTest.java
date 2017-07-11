@@ -89,14 +89,32 @@ public class TimelineTest {
 
     assertEquals(strings.size(), 0);
     sub.update(5.0f);
-    assertEquals(strings.get(0), "main anim done");
-    assertEquals(strings.get(1), "sub anim done");
+    assertEquals(strings.get(1), "main anim done");
+    assertEquals(strings.get(0), "sub anim done");
     assertEquals(strings.size(), 2);
     sub.update(1.0f);
-    assertEquals(strings.get(2), "all main done");
-    assertEquals(strings.get(3), "main anim done");
-    assertEquals(strings.get(4), "all sub done");
-    assertEquals(strings.get(5), "sub anim done");
+    assertEquals(strings.get(2), "all sub done");
+    assertEquals(strings.get(3), "sub anim done");
+    assertEquals(strings.get(4), "all main done");
+    assertEquals(strings.get(5), "main anim done");
     assertEquals(strings.size(), 6);
+  }
+
+  @Test public void after(){
+    Timeline timeline = new Timeline();
+    List<String> messages = new ArrayList<>();
+    timeline.after(3.0f, () -> messages.add("3 seconds passed"));
+    timeline.after(5.0f, () -> messages.add("5 seconds passed"));
+    timeline.update(2.0f);
+    assertEquals(messages.size(), 0);
+    timeline.update(2.0f);
+    assertEquals(messages.size(), 1);
+    assertEquals(messages.get(0), "3 seconds passed");
+    timeline.update(2.0f);
+    assertEquals(messages.size(), 2);
+    assertEquals(messages.get(1), "5 seconds passed");
+    timeline.update(2.0f);
+    timeline.update(2.0f);
+    assertEquals(messages.size(), 2);
   }
 }
