@@ -70,4 +70,19 @@ public class AnimatableTest {
     assertEquals(messages.get(4), "anim stop");
     assertEquals(messages.get(5), "anim done");
   }
+
+  @Test public void progressEvent(){
+    Animatable anim = new Animatable();
+    anim.progressEvent.enableHistory();
+    assertEquals(anim.progressEvent.getHistory().size(), 0);
+    anim.animateFromTo(0.0f, 1.0f, 10.0f); // duration = 10 seconds
+    assertEquals((float)anim.progressEvent.getHistory().get(0), 0.0f, 0.00001f);
+    assertEquals(anim.progressEvent.getHistory().size(), 1);
+    anim.update(1.0f);
+    assertEquals((float)anim.progressEvent.getHistory().get(1), 0.1f, 0.00001f);
+    assertEquals(anim.progressEvent.getHistory().size(), 2);
+    anim.update(4.0f);
+    assertEquals((float)anim.progressEvent.getHistory().get(2), 0.5f, 0.00001f);
+    assertEquals(anim.progressEvent.getHistory().size(), 3);
+  }
 }

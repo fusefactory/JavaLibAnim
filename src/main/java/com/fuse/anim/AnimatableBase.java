@@ -20,7 +20,7 @@ import processing.core.PApplet;
 public class AnimatableBase {
 
 	Curve curve;
-	public Event<Float> updateEvent;
+	public Event<Float> progressEvent;
 	public Event<AnimatableBase> startAnimatingEvent, stopAnimatingEvent, doneEvent;
 
 	private boolean isAnimating, isDelaying;
@@ -57,7 +57,7 @@ public class AnimatableBase {
 		duration = 1f;
 		delayDuration = 0f;
 		curve = new Curve();
-		updateEvent = new Event<Float>();
+		progressEvent = new Event<Float>();
 		startAnimatingEvent = new Event<AnimatableBase>();
 		stopAnimatingEvent = new Event<AnimatableBase>();
 		doneEvent = new Event<AnimatableBase>();
@@ -93,6 +93,7 @@ public class AnimatableBase {
 
 		if(isAnimating){
 			progressTime += dt;
+			progressEvent.trigger(getProgress());
 
 			if(progressTime >= duration)
 				finish();
@@ -150,6 +151,7 @@ public class AnimatableBase {
 
 	public void start(){
 		progressTime = 0f;
+		progressEvent.trigger(getProgress());
 
 		if(delayDuration > 0f){
 			delayTime = 0f;
