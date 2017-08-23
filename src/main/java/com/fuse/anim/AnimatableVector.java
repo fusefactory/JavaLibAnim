@@ -35,7 +35,7 @@ public class AnimatableVector extends AnimatableBaseWithValue<PVector> {
 
   @Override
   public void setValue(PVector newValue, boolean stop){
-    value = newValue.copy();
+    value = newValue.get();
     changeEvent.trigger(value);
 
     if(stop)

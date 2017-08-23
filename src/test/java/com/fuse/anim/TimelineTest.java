@@ -89,14 +89,14 @@ public class TimelineTest {
 
     assertEquals(strings.size(), 0);
     sub.update(5.0f);
-    assertEquals(strings.get(0), "main anim done");
-    assertEquals(strings.get(1), "sub anim done");
+    assertEquals(strings.get(0), "sub anim done");
+    assertEquals(strings.get(1), "main anim done");
     assertEquals(strings.size(), 2);
     sub.update(1.0f);
-    assertEquals(strings.get(2), "all main done");
-    assertEquals(strings.get(3), "main anim done");
-    assertEquals(strings.get(4), "all sub done");
-    assertEquals(strings.get(5), "sub anim done");
+    assertEquals(strings.get(2), "all sub done");
+    assertEquals(strings.get(3), "sub anim done");
+    assertEquals(strings.get(4), "all main done");
+    assertEquals(strings.get(5), "main anim done");
     assertEquals(strings.size(), 6);
   }
 
