@@ -20,8 +20,8 @@ import processing.core.PApplet;
 public class AnimatableBase {
 
 	Curve curve;
-	public Event<Float> updateEvent;
-	public Event<AnimatableBase> startAnimatingEvent, stopAnimatingEvent;
+	public Event<Float> progressEvent;
+	public Event<AnimatableBase> startAnimatingEvent, stopAnimatingEvent, doneEvent;
 
 	private boolean isAnimating, isDelaying;
 	private float	duration,
@@ -57,9 +57,19 @@ public class AnimatableBase {
 		duration = 1f;
 		delayDuration = 0f;
 		curve = new Curve();
-		updateEvent = new Event<Float>();
+		progressEvent = new Event<Float>();
 		startAnimatingEvent = new Event<AnimatableBase>();
 		stopAnimatingEvent = new Event<AnimatableBase>();
+		doneEvent = new Event<AnimatableBase>();
+	}
+
+	public void destroy(){
+		progressEvent.destroy();
+		startAnimatingEvent.destroy();
+		stopAnimatingEvent.destroy();
+		doneEvent.destroy();
+		isAnimating = false;
+		isDelaying = false;
 	}
 
 	/**
@@ -71,11 +81,11 @@ public class AnimatableBase {
 	 */
 	public void update(float dt){
 		if(isDelaying){
-			delayTime+= dt;
+			delayTime += dt;
 
 			// still in delay
 			if(delayTime < delayDuration)
-                return;
+				return;
 
 			// delay finished, run update again with the amount of time
 			// that we've surpassed the delay duration
@@ -92,6 +102,7 @@ public class AnimatableBase {
 
 		if(isAnimating){
 			progressTime += dt;
+			progressEvent.trigger(getProgress());
 
 			if(progressTime >= duration)
 				finish();
@@ -149,6 +160,7 @@ public class AnimatableBase {
 
 	public void start(){
 		progressTime = 0f;
+		progressEvent.trigger(getProgress());
 
 		if(delayDuration > 0f){
 			delayTime = 0f;
@@ -164,11 +176,21 @@ public class AnimatableBase {
 	}
 
 	public void stop(){
+		// System.out.println("_stop");
 		stopAnimatingEvent.trigger(this);
 		isAnimating = false;
 	}
 
 	protected void finish(){
+		// System.out.println("_finish");
 		stop();
+		doneEvent.trigger(this);
+	}
+
+	public float getTimeLeft(){
+		float t = getDuration() - progressTime;
+		if(delayTime < delayDuration)
+			t += delayDuration - delayTime;
+		return t;
 	}
 }

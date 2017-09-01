@@ -23,6 +23,12 @@ public class AnimatableBaseWithValue<T> extends AnimatableBase {
     changeEvent = new Event<T>();
   }
 
+  @Override public void destroy(){
+    updateEvent.destroy();
+    changeEvent.destroy();
+    super.destroy();
+  }
+
   // common methods
   @Override
   public void update(float dt){
@@ -107,6 +113,6 @@ public class AnimatableBaseWithValue<T> extends AnimatableBase {
   @Override
   protected void finish(){
     updateValue();
-    stop();
+    super.finish();
   }
 }
