@@ -129,4 +129,21 @@ public class TimelineTest {
     assertEquals(t.animDoneEvent.size(), 0);
     assertEquals(t.size(), 0);
   }
+
+  @Test public void destroy_when_iteration(){
+    Timeline t = new Timeline();
+    Animatable anim = new Animatable();
+
+    anim.updateEvent.whenTriggered(() -> {
+      t.destroy();
+    });
+
+    t.add(anim);
+
+    assertEquals(t.size(), 1);
+    assertEquals(anim.isActive(), true);
+    t.update(0.4f);
+    assertEquals(t.size(), 0);
+    assertEquals(anim.isActive(), false);
+  }
 }

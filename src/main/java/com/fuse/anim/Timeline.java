@@ -50,7 +50,11 @@ public class Timeline extends Collection<AnimatableBase> {
 	}
 
 	public void update(float dt){
-		this.each((AnimatableBase anim) -> {
+		for(int idx=this.size()-1; idx>=0; idx--){
+			AnimatableBase anim = this.get(idx);
+			if(anim == null) // timeline collection might get modified or even reset/destroy during iteration
+				continue;
+
 			// update the active...
 			if(anim.isActive()){
 				anim.update(dt);
@@ -59,7 +63,7 @@ public class Timeline extends Collection<AnimatableBase> {
 				if(!anim.isActive())
 					remove(anim);
 			}
-		});
+		}
 	}
 
 	public boolean isDone(){
