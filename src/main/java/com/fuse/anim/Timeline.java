@@ -36,8 +36,17 @@ public class Timeline extends Collection<AnimatableBase> {
 				this.doneEvent.trigger(this);
 			}
 		});
+	}
 
+	@Override
+	public void destroy(){
+		doneEvent.destroy();
+		animDoneEvent.destroy();
 
+		for(int idx=this.size()-1; idx>=0; idx--)
+			this.get(idx).destroy();
+
+		super.destroy();
 	}
 
 	public void update(float dt){

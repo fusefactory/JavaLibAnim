@@ -63,6 +63,15 @@ public class AnimatableBase {
 		doneEvent = new Event<AnimatableBase>();
 	}
 
+	public void destroy(){
+		progressEvent.destroy();
+		startAnimatingEvent.destroy();
+		stopAnimatingEvent.destroy();
+		doneEvent.destroy();
+		isAnimating = false;
+		isDelaying = false;
+	}
+
 	/**
 	 * Progresses the animation the specified amount of time.
 	 * Triggers the startAnimatingEvent if this progression completes the delay duration

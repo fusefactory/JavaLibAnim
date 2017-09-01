@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TimelineTest {
   @Test public void doneEvent(){
@@ -89,15 +90,9 @@ public class TimelineTest {
 
     assertEquals(strings.size(), 0);
     sub.update(5.0f);
-    assertEquals(strings.get(0), "sub anim done");
-    assertEquals(strings.get(1), "main anim done");
-    assertEquals(strings.size(), 2);
+    assertEquals(strings.stream().collect(Collectors.joining(",")), "main anim done,sub anim done");
     sub.update(1.0f);
-    assertEquals(strings.get(2), "all sub done");
-    assertEquals(strings.get(3), "sub anim done");
-    assertEquals(strings.get(4), "all main done");
-    assertEquals(strings.get(5), "main anim done");
-    assertEquals(strings.size(), 6);
+    assertEquals(strings.stream().collect(Collectors.joining(",")), "main anim done,sub anim done,all main done,main anim done,all sub done,sub anim done");
   }
 
   @Test public void after(){
@@ -116,5 +111,22 @@ public class TimelineTest {
     timeline.update(2.0f);
     timeline.update(2.0f);
     assertEquals(messages.size(), 2);
+  }
+
+  @Test public void destroy(){
+    Timeline t = new Timeline();
+    t.doneEvent.addListener((Timeline tt) -> {});
+    t.animDoneEvent.addListener((AnimatableBase a) -> {});
+    t.add(new Animatable());
+
+    assertEquals(t.doneEvent.size(), 1);
+    assertEquals(t.animDoneEvent.size(), 2);
+    assertEquals(t.size(), 1);
+
+    t.destroy();
+
+    assertEquals(t.doneEvent.size(), 0);
+    assertEquals(t.animDoneEvent.size(), 0);
+    assertEquals(t.size(), 0);
   }
 }

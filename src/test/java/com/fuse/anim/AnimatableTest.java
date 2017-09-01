@@ -85,4 +85,35 @@ public class AnimatableTest {
     assertEquals((float)anim.progressEvent.getHistory().get(2), 0.5f, 0.00001f);
     assertEquals(anim.progressEvent.getHistory().size(), 3);
   }
+
+  @Test public void detroy(){
+    Animatable anim = new Animatable();
+    anim.progressEvent.addListener((Float v) -> {});
+    anim.startAnimatingEvent.addListener((AnimatableBase a) -> {});
+    anim.stopAnimatingEvent.addListener((AnimatableBase a) -> {});
+    anim.doneEvent.addListener((AnimatableBase a) -> {});
+    anim.updateEvent.addListener((Float v) -> {});
+    anim.changeEvent.addListener((Float v) -> {});
+    anim.start();
+
+    assertEquals(anim.progressEvent.size(), 1);
+    assertEquals(anim.startAnimatingEvent.size(), 1);
+    assertEquals(anim.stopAnimatingEvent.size(), 1);
+    assertEquals(anim.doneEvent.size(), 1);
+    assertEquals(anim.updateEvent.size(), 1);
+    assertEquals(anim.changeEvent.size(), 1);
+    assertEquals(anim.isActive(), true);
+    assertEquals(anim.isAnimating(), true);
+
+    anim.destroy();
+
+    assertEquals(anim.progressEvent.size(), 0);
+    assertEquals(anim.startAnimatingEvent.size(), 0);
+    assertEquals(anim.stopAnimatingEvent.size(), 0);
+    assertEquals(anim.doneEvent.size(), 0);
+    assertEquals(anim.updateEvent.size(), 0);
+    assertEquals(anim.changeEvent.size(), 0);
+    assertEquals(anim.isActive(), false);
+    assertEquals(anim.isAnimating(), false);
+  }
 }
