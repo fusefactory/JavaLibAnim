@@ -2,6 +2,7 @@ package com.fuse.anim;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import java.util.*;
 
@@ -130,5 +131,9 @@ public class AnimatableTest {
     assertEquals(anim.isDone(), false);
     anim.update(0.5f);
     assertEquals(anim.isDone(), true);
+  }
+
+  @Ignore @Test public void pause_resume(){
+
   }
 }
