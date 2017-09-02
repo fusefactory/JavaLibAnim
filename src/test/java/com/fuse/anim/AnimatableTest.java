@@ -116,4 +116,19 @@ public class AnimatableTest {
     assertEquals(anim.isActive(), false);
     assertEquals(anim.isAnimating(), false);
   }
+
+  @Test public void isDone(){
+    Animatable anim = new Animatable();
+    assertEquals(anim.isDone(), false);
+    anim.setDuration(10.0f);
+    assertEquals(anim.isDone(), false);
+    anim.start();
+    assertEquals(anim.isDone(), false);
+    anim.update(5.0f);
+    assertEquals(anim.isDone(), false);
+    anim.update(4.5f);
+    assertEquals(anim.isDone(), false);
+    anim.update(0.5f);
+    assertEquals(anim.isDone(), true);
+  }
 }
