@@ -23,6 +23,9 @@ public class Timeline extends Collection<AnimatableBase> {
 		});
 
 		this.addEvent.addListener((AnimatableBase newAnim) -> {
+			// we'll notify our listener when any of our anims completes
+			this.animDoneEvent.forward(newAnim.doneEvent);
+
 			// auto-start added animations
 			if(!newAnim.isActive())
 				newAnim.start();
@@ -61,8 +64,6 @@ public class Timeline extends Collection<AnimatableBase> {
 				// animation just finished? remove it
 				if(!anim.isActive()){
 					if(anim.isDone()){
-						// we'll notify our listener when any of our anims completes
-						this.animDoneEvent.trigger(anim);
 						remove(anim);
 						anim.destroy();
 					}

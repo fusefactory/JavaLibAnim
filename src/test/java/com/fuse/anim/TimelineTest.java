@@ -59,7 +59,7 @@ public class TimelineTest {
     assertEquals(a2.isAnimating(), false);
   }
 
-  @Ignore @Test public void addOtherTimelines(){
+  @Test public void addOtherTimelines(){
     // System.out.println("addOtherTimelines");
     Timeline main = new Timeline();
     Timeline sub = new Timeline();
@@ -91,9 +91,9 @@ public class TimelineTest {
 
     assertEquals(strings.size(), 0);
     sub.update(5.0f);
-    assertEquals(strings.stream().collect(Collectors.joining(",")), "main anim done,sub anim done");
+    assertEquals(strings.stream().collect(Collectors.joining(",")), "sub anim done,main anim done");
     sub.update(1.0f);
-    assertEquals(strings.stream().collect(Collectors.joining(",")), "main anim done,sub anim done,all main done,main anim done,all sub done,sub anim done");
+    assertEquals(strings.stream().collect(Collectors.joining(",")), "sub anim done,main anim done,all sub done,sub anim done,all main done,main anim done");
   }
 
   @Test public void after(){
