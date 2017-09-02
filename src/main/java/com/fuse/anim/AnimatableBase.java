@@ -158,6 +158,11 @@ public class AnimatableBase {
 		return isAnimating;
 	}
 
+	public boolean isDone(){
+		return progressTime >= duration;
+	}
+
+	/** Resets progress, starts delay-cycle if delayDuration is not zero, otherwise starts animating */
 	public void start(){
 		progressTime = 0f;
 		progressEvent.trigger(getProgress());
@@ -175,10 +180,25 @@ public class AnimatableBase {
 		startAnimatingEvent.trigger(this);
 	}
 
+	/** Triggers the stopAnimatingEvent and sets isAnimating flag to false. Does not affect progress */
 	public void stop(){
-		// System.out.println("_stop");
 		stopAnimatingEvent.trigger(this);
 		isAnimating = false;
+	}
+
+	/** Just an alias for the stop method (for now) */
+	public void pause(){
+		this.stop();
+	}
+
+	public void resume(){
+		if(isActive())
+			return;
+
+		if(delayTime < delayDuration)
+			isDelaying = true;
+		else
+			isAnimating = true;
 	}
 
 	protected void finish(){

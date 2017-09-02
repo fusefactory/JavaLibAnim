@@ -12,6 +12,7 @@ import com.fuse.anim.Animatable;
 public class Timeline extends Collection<AnimatableBase> {
 	public Event<Timeline> doneEvent;
 	public Event<AnimatableBase> animDoneEvent;
+	// TODO private boolean bRemoveAnimationsWhenDone = true;
 
 	public Timeline(){
 		doneEvent = new Event<>();
@@ -50,16 +51,25 @@ public class Timeline extends Collection<AnimatableBase> {
 	}
 
 	public void update(float dt){
-		this.each((AnimatableBase anim) -> {
+		for(int idx=this.size()-1; idx>=0; idx--){
+			AnimatableBase anim = this.get(idx);
+
+			if(anim == null) // timeline collection might get modified or even reset/destroy during iteration
+				continue;
+
 			// update the active...
 			if(anim.isActive()){
 				anim.update(dt);
 
 				// animation just finished? remove it
-				if(!anim.isActive())
-					remove(anim);
+				if(!anim.isActive()){
+					if(anim.isDone()){
+						remove(anim);
+						anim.destroy();
+					}
+				}
 			}
-		});
+		}
 	}
 
 	public boolean isDone(){

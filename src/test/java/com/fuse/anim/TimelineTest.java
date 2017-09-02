@@ -2,6 +2,7 @@ package com.fuse.anim;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -90,9 +91,9 @@ public class TimelineTest {
 
     assertEquals(strings.size(), 0);
     sub.update(5.0f);
-    assertEquals(strings.stream().collect(Collectors.joining(",")), "main anim done,sub anim done");
+    assertEquals(strings.stream().collect(Collectors.joining(",")), "sub anim done,main anim done");
     sub.update(1.0f);
-    assertEquals(strings.stream().collect(Collectors.joining(",")), "main anim done,sub anim done,all main done,main anim done,all sub done,sub anim done");
+    assertEquals(strings.stream().collect(Collectors.joining(",")), "sub anim done,main anim done,all sub done,sub anim done,all main done,main anim done");
   }
 
   @Test public void after(){
@@ -128,5 +129,74 @@ public class TimelineTest {
     assertEquals(t.doneEvent.size(), 0);
     assertEquals(t.animDoneEvent.size(), 0);
     assertEquals(t.size(), 0);
+  }
+
+  @Test public void destroy_when_iteration(){
+    Timeline t = new Timeline();
+    Animatable anim = new Animatable();
+
+    anim.updateEvent.whenTriggered(() -> {
+      t.destroy();
+    });
+
+    t.add(anim);
+
+    assertEquals(t.size(), 1);
+    assertEquals(anim.isActive(), true);
+    t.update(0.4f);
+    assertEquals(t.size(), 0);
+    assertEquals(anim.isActive(), false);
+  }
+
+  @Test public void pausedAnimsNotRemoved(){
+    Timeline t = new Timeline();
+    Animatable a = new Animatable();
+    a.setDuration(3.0f);
+    t.add(a);
+    assertEquals(t.size(), 1);
+    // 1 second elapses
+    t.update(1.0f);
+    assertEquals(t.size(), 1);
+    // stop
+    a.stop();
+    assertEquals(t.size(), 1);
+    // 3 more seconds elapse (in intervals)
+    t.update(1.0f);
+    t.update(1.0f);
+    t.update(1.0f);
+    // a doesn't disappear (completed animation disappear)
+    assertEquals(t.size(), 1);
+    // re-start anim
+    a.start();
+    t.update(1.0f);
+    assertEquals(t.size(), 1);
+    // complete anim
+    t.update(2.0f);
+    // complete animations are removed
+    assertEquals(t.size(), 0);
+  }
+
+  @Test public void pausedAnimsNotRemoved2(){
+    Timeline t = new Timeline();
+    Animatable a = new Animatable();
+    a.progressEvent.addListener((Float progress) -> {
+      if(progress > 0.5f)
+        a.pause();
+    });
+
+    // configure and start the animation
+    a.setDuration(3.0f);
+    t.add(a);
+    assertEquals(t.size(), 1);
+
+    // 1 second elapses
+    t.update(1.0f);
+    assertEquals(t.size(), 1);
+
+    // another second elapses
+    // now the progressEvent listener
+    // will pause the animation
+    t.update(1.0f);
+    assertEquals(t.size(), 1);
   }
 }
