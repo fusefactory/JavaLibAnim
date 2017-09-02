@@ -1,11 +1,23 @@
 # JavaLibAnim
 
-[![Build Status](https://travis-ci.org/fusefactory/JavaLibEvent.svg?branch=master)](https://travis-ci.org/fusefactory/JavaLibEvent)
+[![Build Status](https://travis-ci.org/fusefactory/JavaLibAnim.svg?branch=master)](https://travis-ci.org/fusefactory/JavaLibAnim)
 
 _Java animation classes inspired by armadillu's OpenFrameworks (C++) addon: [ofxAnimatable](https://github.com/armadillu/ofxAnimatable)._
 
 
-## Usage: Float animation
+## Installation
+
+Use as maven/gradle/sbt/leiningen dependency with [JitPack](https://github.com/jitpack/maven-modular)
+* https://jitpack.io/#fusefactory/JavaLibAnim
+
+For more info on jitpack see;
+* https://github.com/jitpack/maven-simple
+* https://jitpack.io/docs/?#building-with-jitpack
+
+## JavaDocs
+* https://fusefactory.github.io/JavaLibAnim/site/apidocs/index.html
+
+## Usage: Animated float value
 ```java
 import com.fuse.anim.*;
 
@@ -34,3 +46,12 @@ void draw(){
 
     // ... do something with values ...
 }
+
+## Usage: event listeners
+_TODO_
+
+## Usage: Timeline
+_TODO_
+
+## Usage: Color animation
+_TODO_
