@@ -47,7 +47,17 @@ public class AnimatableBase {
 	 */
 	public AnimatableBase(CurveType type){
 		_init();
-		setCurveType(type);
+		this.setCurveType(type);
+	}
+
+	/**
+	 * Constructor which loads the same default values as the default constructor, but lets the caller specify the duration in seconds
+	 *
+	 * @param type Curve type (easing) to use for this animation
+	 */
+	public AnimatableBase(float duration){
+		_init();
+		this.setDuration(duration);
 	}
 
 	/** Initializes this event with default values, used by the constructors */
