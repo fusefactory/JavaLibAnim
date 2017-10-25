@@ -4,32 +4,33 @@ import com.fuse.anim.CurveType;
 
 public class Curve {
 
-	private CurveType type;
-	private final static CurveType DEFUALT_TYPE = CurveType.LINEAR;
+  private boolean bMirrorSecondHalf = false;
+  private boolean bMirrorLeft = false;
 
-	public Curve(){
-		this.type = DEFUALT_TYPE;
-	}
+  public float get(float percent){
+    if(bMirrorLeft){
+      if(percent < 0.5f)  return 0.5f - 0.5f * this.valueFor(1.0f - percent*2.0f);
+      else                return 0.5f + 0.5f * this.valueFor((percent - 0.5f) * 2.0f);
+    }
 
-	public Curve(CurveType type){
-		this.type = type;
-	}
+    if(bMirrorSecondHalf && percent < 0.5f){
+      return this.valueFor(0.5f) * 2.0f - this.valueFor(1.0f - percent);
+    }
 
-	public float get(float percent){
-		switch(type){
-			case LINEAR:
-				return percent;
+    return this.valueFor(percent);
+  }
 
-			// QUADRATIC_EASE_OUT; name and implementation stolen from ofxAnimatable by armadillu;
-			// https://github.com/armadillu/ofxAnimatable/blob/master/src/ofxAnimatable.h
-			case QUADRATIC_EASE_OUT:
-				return 1.0f - (percent - 1.0f) * (percent - 1.0f);
-		}
-		
-		return 0f;
-	}
+  protected float valueFor(float x){
+    return x;
+  }
 
-	public void setType(CurveType newType){
-		type = newType;
-	}
+  public Curve setMirrorSecondHalf(boolean active){
+    bMirrorSecondHalf = active;
+    return this;
+  }
+
+  public Curve setMirrorLeft(boolean active){
+    bMirrorLeft = active;
+    return this;
+  }
 }
