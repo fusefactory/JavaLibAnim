@@ -1,7 +1,5 @@
 package com.fuse.anim;
 
-import com.fuse.anim.CurveType;
-
 public class Curve {
 
   private boolean bMirrorSecondHalf = false;
