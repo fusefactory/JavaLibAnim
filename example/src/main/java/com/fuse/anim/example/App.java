@@ -32,7 +32,7 @@ public class App extends PApplet {
   }
 
   public void settings(){
-    papplet.size(800, 600, P3D);
+    papplet.size(530, 270, P3D);
   }
 
   public void setup(){
@@ -96,7 +96,7 @@ public class App extends PApplet {
 
         // curve foreground/curve
         pg.noStroke();
-        pg.fill(pg.color(255,255));
+        pg.fill(pg.color(255,150));
 
         for(float curveX=0.0f; curveX<=1.0f; curveX += curveStep){
           float height = c.get(curveX) * curveSize;
@@ -117,7 +117,7 @@ public class App extends PApplet {
     float bottom = y+curveSize;
 
     papplet.noStroke();
-    papplet.fill(papplet.color(255,0,0,220));
+    papplet.fill(papplet.color(255,0,0,150));
     papplet.ellipseMode(CENTER);
 
     for(Curve c : curves){
