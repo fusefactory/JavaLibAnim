@@ -1,11 +1,10 @@
 package com.fuse.anim;
 
-import com.fuse.utils.Event;
-import java.util.function.Consumer;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
-import com.fuse.anim.Animatable;
+import com.fuse.utils.Event;
 
 public class Manager {
 	private List<Animatable> anims;

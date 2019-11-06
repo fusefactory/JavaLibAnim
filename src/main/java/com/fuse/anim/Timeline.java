@@ -1,13 +1,11 @@
 package com.fuse.anim;
 
-import com.fuse.utils.Event;
-import com.fuse.cms.Collection;
-
-import java.util.function.Consumer;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
-import com.fuse.anim.Animatable;
+import com.fuse.cms.Collection;
+import com.fuse.utils.Event;
 
 public class Timeline extends Collection<AnimatableBase> {
 	public Event<Timeline> doneEvent;

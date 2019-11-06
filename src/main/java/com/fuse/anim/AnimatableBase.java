@@ -1,8 +1,10 @@
 package com.fuse.anim;
 
-import processing.core.PApplet;
+import com.fuse.anim.curves.LinearCurve;
+import com.fuse.anim.curves.QuadraticEaseOutCurve;
 import com.fuse.utils.Event;
-import com.fuse.anim.curves.*;
+
+import processing.core.PApplet;
 
 /**
  * Base class for animations; takes care of interpolation, duration
